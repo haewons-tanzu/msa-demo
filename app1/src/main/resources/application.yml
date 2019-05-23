@@ -1,0 +1,42 @@
+
+spring:
+  application:
+    name: demo-app2
+  profiles:
+    active: local
+
+greeting: from Local
+
+management:
+  security:
+    enabled:
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+  info:
+    git:
+      enabled: true
+      mode: full
+
+  cloudfoundry:
+    skip-ssl-validation: true
+
+eureka:
+  instance:
+    leaseRenewalIntervalInSeconds: 10
+    metadataMap:
+      instanceId: ${vcap.application.instance_id:${spring.application.name}:${server.port:8080}}
+  client:
+    serviceUrl:
+      defaultZone: ${vcap.services.service-registry.credentials.uri:http://127.0.0.1:8761}/eureka/
+
+turbine:
+  aggregator:
+    clusterConfig: hub-boot
+  appConfig: hub-boot
+
+
+#logging:
+#  pattern:
+#    level: "%clr(%5p) %clr([${spring.application.name:-},%X{X-B3-TraceId:-},%X{X-B3-SpanId:-},%X{X-B3-ParentSpanId:-},%X{X-Span-Export:-}]){yellow}"
